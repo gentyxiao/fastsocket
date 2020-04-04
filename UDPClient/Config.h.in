@@ -1,0 +1,10 @@
+﻿#ifndef UDPNetworkLib_Config_HHHH
+#define UDPNetworkLib_Config_HHHH
+
+
+#undef       WIN
+#define      MAR_VERSION         @MAR_VERSION@
+#define      MIN_VERSION         @MIN_VERSION@
+#define      RELEASE_VERSION     @RELEASE_VERSION@
+#undef       UDPNetworkLIb_Printf
+#endif

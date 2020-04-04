@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Head">
+      <UniqueIdentifier>{91a499d9-0b31-4a40-9f03-f8d09fa9c847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{cd12e150-bb66-4a6e-a311-369b1a984ed4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="SKYStreamDispatchFactory.h">
+      <Filter>Head</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPClient.h">
+      <Filter>Head</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ISKYStreamDispatch.h">
+      <Filter>Head</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ISKYStreamSession.h">
+      <Filter>Head</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPClientSession.h">
+      <Filter>Head</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.h.in" />
+    <None Include="ShellScript" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SKYStreamDispatchFactory.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPClient.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="itUdpClient.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPClientSession.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
