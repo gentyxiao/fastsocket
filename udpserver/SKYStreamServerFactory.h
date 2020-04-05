@@ -15,6 +15,4 @@ public:
 protected:
     static SKYStreamServerFactory* m_pInstance;
 };
-
-
 #endif

@@ -14,7 +14,7 @@ configure_file(
 
 
 ################################### Reconfigure final output directory ##################################
-set(LIBRARY_OUTPUT_PATH                    ${PROJECT_SOURCE_DIR}/../../../bin/Linux)
+set(LIBRARY_OUTPUT_PATH                    ${PROJECT_SOURCE_DIR}/../Build/bin)
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 
 
