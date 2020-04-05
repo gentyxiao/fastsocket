@@ -68,9 +68,7 @@ static int add_event(IStreamSession *udp_session)
 		struct timeval timeout = { timeout_second, 0 }; // 设置event超时为40秒,40秒内没有数据，调用超时
 		event_add(plistener_event, &timeout);
 	}
-
     pevent_info->listener_event_ = plistener_event;
-
 	return 1;
 }
 
@@ -83,7 +81,6 @@ static int delete_event(IStreamSession *udp_session)
         event_free(pevent_info->listener_event_);
         pevent_info->listener_event_ = nullptr;
 	}
-
 	return 1;
 }
 
@@ -256,8 +253,6 @@ IStreamSession* CUDPServer::CreateSession(char* ip, int Port)
     if (bind(fd, (struct sockaddr*)&sin, sizeof(sin)) < 0){
         return nullptr;
     }
-
-
     IStreamSession *udp_session = UdpServerSession::CreateUdpSession();
     udp_session->SetRequestSession(fd);
     EventInfo *peventinfo = ((UdpServerSession*)udp_session)->GetEventInfo();
@@ -352,8 +347,6 @@ bool CUDPServer::ReadData(int fd, short event, void *arg)
 		}
 		us->callback_fun_->OnRecvData(buffer, ret, us);
 	} while (1);
-
-	
     return true;
 }
 

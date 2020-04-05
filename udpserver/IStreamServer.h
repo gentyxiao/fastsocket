@@ -2,7 +2,6 @@
 #define I_STREAM_SERVER_H_
 #include "IStreamSession.h"
 
-
 class IStreamServer
 {
 public:

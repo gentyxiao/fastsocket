@@ -1,7 +1,6 @@
 #include "UDPServerFactory.h"
 #include "UDPServer.h"
 
-
 UDPServerFactory* UDPServerFactory::m_pInstance = NULL;
 void UDPServerFactory::Version()
 {
@@ -20,6 +19,7 @@ UDPServerFactory* UDPServerFactory::GetInstance()
 	}
 	return m_pInstance;
 }
+
 UDPServerFactory::~UDPServerFactory()
 {
 	if (NULL != m_pService)
@@ -28,6 +28,7 @@ UDPServerFactory::~UDPServerFactory()
 		m_pService = NULL;
 	}
 }
+
 IStreamServer* UDPServerFactory::CreateProduct()
 {
 	if (NULL == m_pService)

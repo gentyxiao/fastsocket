@@ -41,6 +41,7 @@ ADD_DEFINITIONS(-O2)
 endif()
 ADD_DEFINITIONS("-std=c++11")
 ################################### generate lib file ################################################################
-ADD_LIBRARY(${PROJECT_NAME}                     SHARED                      ${DIR_SRCS})
+#ADD_LIBRARY(${PROJECT_NAME}                     SHARED                      ${DIR_SRCS})
+ADD_LIBRARY(${PROJECT_NAME}                     STATIC                      ${DIR_SRCS})
 
 

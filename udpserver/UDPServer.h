@@ -1,6 +1,5 @@
 #ifndef UDP_SERVER_H_
 #define UDP_SERVER_H_
-
 #include "IStreamServer.h"
 #include "UDPServerSession.h"
 #include <vector>
@@ -11,13 +10,9 @@ public:
     CUDPServer();
     ~CUDPServer();
 public:
-
     virtual bool InitError(void *pError);
-
     virtual bool InitServer(int nMaxThread);
- 
     virtual bool CloseServer();
-
     EventContext* SelectEventContext();
 public:
     virtual IStreamSession* CreateSession(char* ip, int Port);
@@ -29,7 +24,5 @@ public:
 private:
     std::vector<EventContext*> event_context_vector_;
 };
-
-
 
 #endif

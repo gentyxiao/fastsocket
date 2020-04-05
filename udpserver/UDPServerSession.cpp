@@ -79,5 +79,6 @@ void UdpServerSession::DeleteUdpSession(UdpServerSession *us)
 {
     if (us != NULL){
         delete us;
+        us = NULL;
     }
 }
