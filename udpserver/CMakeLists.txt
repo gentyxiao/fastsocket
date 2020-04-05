@@ -1,4 +1,4 @@
-PROJECT(StreamServer)
+PROJECT(UDPServer)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 
@@ -14,22 +14,24 @@ configure_file(
 
 
 ################################### Reconfigure final output directory ##################################
-set(LIBRARY_OUTPUT_PATH                    ${PROJECT_SOURCE_DIR}/../Build/bin)
+set(LIBRARY_OUTPUT_PATH                    ${PROJECT_SOURCE_DIR}/../bulid/bin)
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 
 
 
 ################################### set include path ###################################################################### 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../../../Global/)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../../../Include/)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../../../Include/libevent/)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../include/)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../import/libevent/include)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/../import/libevent/include/event2)
 
-LINK_DIRECTORIES(./)
-LINK_DIRECTORIES(../../../bin/Linux)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/../import/libevent/lib)
 
-LINK_LIBRARIES(pthread event)
-
+LINK_LIBRARIES(pthread)
+LINK_LIBRARIES(event)
+LINK_LIBRARIES(event_openssl)
+LINK_LIBRARIES(event_extra)
+LINK_LIBRARIES(event_core)
 ################################### compile options ####################################################################
 if(Flag)        
 message( STATUS "==============================message to Flag" )        

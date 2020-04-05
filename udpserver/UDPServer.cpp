@@ -1,5 +1,5 @@
 #include "UDPServer.h"
-#include "ISKYStreamSession.h"
+#include "IStreamSession.h"
 #include "UDPServerSession.h"
 #include <list>
 #include <vector>
@@ -52,7 +52,7 @@ static void time_out_static(int  fd, short event, void *arg)
 	server->TimeOut(fd , event, server);
 }
 
-static int add_event(ISKYStreamSession *udp_session)
+static int add_event(IStreamSession *udp_session)
 {
     UdpServerSession *us = (UdpServerSession*)(udp_session);
 	if (us->fd_ == -1) return -1;
@@ -74,7 +74,7 @@ static int add_event(ISKYStreamSession *udp_session)
 	return 1;
 }
 
-static int delete_event(ISKYStreamSession *udp_session)
+static int delete_event(IStreamSession *udp_session)
 {
     UdpServerSession *us = (UdpServerSession*)(udp_session);
     EventInfo *pevent_info = us->GetEventInfo();
@@ -145,7 +145,6 @@ CUDPServer::~CUDPServer()
 
 bool CUDPServer::InitError(void *pError)
 {
-    m_errorInfo = (CErrorInfo*)pError;
 }
 
 bool CUDPServer::InitServer(int nMaxThread)
@@ -166,7 +165,6 @@ bool CUDPServer::InitServer(int nMaxThread)
         EventContext *event_cont = new EventContext;
 		if (pipe(arr) != 0) {
             printf("pipe create,write fd(%d),read fd(%d),errno(%d)\n",arr[0],arr[1],errno);
-			m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "create pipe error");
 			return false;
 		}
         event_cont->pipe_read_ = arr[0];
@@ -174,7 +172,6 @@ bool CUDPServer::InitServer(int nMaxThread)
 		
 		struct event_base *pevent_base = event_base_new();
         if (!pevent_base){
-			m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "create eventBase Failed");
 			return false;
 		}
 
@@ -182,7 +179,6 @@ bool CUDPServer::InitServer(int nMaxThread)
 		event_add(listener_event, NULL);
 		// thread create
         if (pthread_create(&tid, NULL, lanuch_event, pevent_base) != 0){
-			m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "Create thread error!");
 			return false;
 		}
 	
@@ -200,7 +196,6 @@ bool CUDPServer::CloseServer()
     for (; iter != event_context_vector_.end(); ++iter){
         ret = event_base_loopexit((*iter)->event_base_, NULL);
         if (-1 == ret){
-            m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "libevent exit failed");
         }
         event_base_free((*iter)->event_base_);
         close((*iter)->pipe_read_);
@@ -230,7 +225,7 @@ EventContext* CUDPServer::SelectEventContext()
     return pevent_context;
 }
 
-ISKYStreamSession* CUDPServer::CreateSession(char* ip, int Port)
+IStreamSession* CUDPServer::CreateSession(char* ip, int Port)
 {
     int fd;
     sockaddr_in sin;
@@ -239,7 +234,6 @@ ISKYStreamSession* CUDPServer::CreateSession(char* ip, int Port)
     sin.sin_port = htons(Port);
     fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (fd < 0){
-        m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "socket fd error");
         return nullptr;
     }
 
@@ -257,16 +251,14 @@ ISKYStreamSession* CUDPServer::CreateSession(char* ip, int Port)
 
     int sock_opt = 1;
     if (-1 == setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &sock_opt, sizeof(sock_opt))){
-        m_errorInfo->Warning("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "set listen socket opt Failed");
     }
     
     if (bind(fd, (struct sockaddr*)&sin, sizeof(sin)) < 0){
-        m_errorInfo->Error("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "bind fd Failed");
         return nullptr;
     }
 
 
-    ISKYStreamSession *udp_session = UdpServerSession::CreateUdpSession();
+    IStreamSession *udp_session = UdpServerSession::CreateUdpSession();
     udp_session->SetRequestSession(fd);
     EventInfo *peventinfo = ((UdpServerSession*)udp_session)->GetEventInfo();
     peventinfo->udpserver_ = this;
@@ -284,10 +276,9 @@ ISKYStreamSession* CUDPServer::CreateSession(char* ip, int Port)
     return udp_session;
 }
 
-int CUDPServer::DestorySession(ISKYStreamSession *session)
+int CUDPServer::DestorySession(IStreamSession *session)
 {
     if (NULL == session){
-        m_errorInfo->Warning("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "session(DestorySession) is NULL");
         return -1;
     }
     
@@ -301,7 +292,7 @@ int CUDPServer::DestorySession(ISKYStreamSession *session)
     return 0;
 }
 
-int CUDPServer::StartSession(ISKYStreamSession * session)
+int CUDPServer::StartSession(IStreamSession * session)
 {
     if (nullptr == session){
         return -1;
@@ -323,10 +314,9 @@ int CUDPServer::StartSession(ISKYStreamSession * session)
     return 0;
 }
 
-int CUDPServer::StopSession(ISKYStreamSession * session)
+int CUDPServer::StopSession(IStreamSession * session)
 {
     if (NULL == session){
-        m_errorInfo->Warning("UDPTransform", __FILE__, __LINE__, __FUNCTION__, "session(StopSession) is NULL");
         return -1;
     }
     EventItem *pevitem = ((UdpServerSession*)session)->GetEventItem();
@@ -358,12 +348,9 @@ bool CUDPServer::ReadData(int fd, short event, void *arg)
 		int ret = recvfrom(fd, buffer, MAXSIZE, MSG_DONTWAIT, (struct sockaddr *) &cliaddr, &len);
 		if (ret <= 0)
 		{
-
 			break;
 		}
-
 		us->callback_fun_->OnRecvData(buffer, ret, us);
-
 	} while (1);
 
 	
@@ -375,12 +362,10 @@ bool CUDPServer::TimeOut(int fd, short event,void *arg)
 	if (fd == -1){
 		return false;
 	}
-
     UdpServerSession *us = (UdpServerSession*)(arg);
+
 	if (EV_TIMEOUT == event){
 		delete_event(us);
-
-		m_errorInfo->PrintfInfo("UDPTransform",  __FILE__, __LINE__, __FUNCTION__, "TimeOut");
         us->callback_fun_->OnTimeOut(us);
 	}
 	return true;

@@ -1,15 +1,6 @@
 #ifndef UDP_SESSION_H_
 #define UDP_SESSION_H_
-/*****************************************************************************
-* \File: UdpServerSession.h
-* \Date: 2016/05/04
-* \Copyright: (C) 1990-2016 sky-light.com.hk
-* \Author: liaozijun
-* \Brief:
-* \Version: 1.0.0.0
-* \Note:
-*****************************************************************************/
-#include "ISKYStreamSession.h"
+#include "IStreamSession.h"
 #include <string.h>
 #include <atomic>
 #include <mutex>
@@ -53,7 +44,7 @@ struct EventItem
     EventInfo *event_info_;             /*每次请求调用event_new接口创建的事件信息*/
 };
 
-class UdpServerSession : public ISKYStreamSession
+class UdpServerSession : public IStreamSession
 {
 public:
     UdpServerSession();
@@ -62,16 +53,12 @@ public:
     virtual void AddRef();
     virtual void Release();
     //set callback function
-    virtual void SetSessionAction(ISKYStreamAction *action);
-
+    virtual void SetSessionAction(IStreamAction *action);
     virtual void  SetRequestSession(int session);
     virtual int   GetRequestSession();
-
     virtual void  SetResponseSession(void *session);
     virtual void* GetResponseSession();
-
     virtual int SetRequestTimeout(long second);
-
     virtual const char * GetSrcAddress(){};
     virtual int GetSrcPort(){};
     virtual const char * GetDstAddress(){};
@@ -87,7 +74,7 @@ public:
     static UdpServerSession* CreateUdpSession();
     //delete udpSession
     void DeleteUdpSession(UdpServerSession *us);
-    ISKYStreamAction *callback_fun_;
+    IStreamAction *callback_fun_;
     int fd_;
 public:
 	long timeout_seconds_;

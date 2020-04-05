@@ -31,7 +31,7 @@ void UdpServerSession::Release()
     } 
 }
 
-void UdpServerSession::SetSessionAction(ISKYStreamAction *action)
+void UdpServerSession::SetSessionAction(IStreamAction *action)
 { 
     callback_fun_ = action;
 }
