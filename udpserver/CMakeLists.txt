@@ -1,4 +1,4 @@
-PROJECT(UDPServer)
+PROJECT(udpserver)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 
@@ -15,6 +15,7 @@ configure_file(
 
 ################################### Reconfigure final output directory ##################################
 set(LIBRARY_OUTPUT_PATH                    ${PROJECT_SOURCE_DIR}/../bulid/bin)
+# 遍历目录的所有文件赋值给Dir_SRCS
 AUX_SOURCE_DIRECTORY(. DIR_SRCS)
 
 
