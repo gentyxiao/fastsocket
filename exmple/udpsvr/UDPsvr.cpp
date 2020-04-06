@@ -26,11 +26,18 @@ int main()
     }
 
     IStreamServer* svr = UDPServerFactory::GetInstance()->CreateProduct();
+    bool isSucc = svr->InitServer(5);
+    if (!isSucc)
+    {
+        printf("init udp svr failed\n");
+        return -2;
+    }
+    
     IStreamSession * session = svr->CreateSession("0.0.0.0",10000);
     if (!session)
     {
         printf("create session failed\n");
-        return -2;
+        return -3;
     }
 
     session->SetRequestTimeout(30);
@@ -38,10 +45,10 @@ int main()
     int ret = svr->StartSession(session);
     if (ret != 0)
     {
-        printf("start svr failed");
-        return -3;
+        printf("start svr failed\n");
+        return -4;
     }
-    printf("udp start succ, port:%d",10000);
+    printf("udp start succ, port:%d\n",10000);
     while (1)
     {
         sleep(10);
